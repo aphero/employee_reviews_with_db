@@ -1,74 +1,78 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require './employee_review_migration'
 require './employee'
 require './department'
 require 'byebug'
 
+EmployeeReviewMigration.migrate(:down) rescue false
+EmployeeReviewMigration.migrate(:up)
+
 class ReviewsTest < Minitest::Test
 
-  def test_create_new_department
-    assert Department.new("Development")
-    assert_raises(ArgumentError) do
-      Department.new()
-    end
-    assert_raises(ArgumentError) do
-      Department.new(1,2)
-    end
+  def test_create_new_department_01
+    assert Department.create(name: "Development")
+    # assert_raises(ArgumentError) do
+    #   Department.create()
+    # end
+    # assert_raises(ArgumentError) do
+    #   Department.create(name: "Development")
+    # end
   end
 
-  def test_create_new_employee
-    assert Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
-    assert_raises(ArgumentError) do
-      Employee.new(1,2,3,4,5)
-    end
-    assert_raises(ArgumentError) do
-      Employee.new(1,2,3)
-    end
+  def test_create_new_employee_02
+    assert Employee.create( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
+    # assert_raises(ArgumentError) do
+    #   Employee.create(1,2,3,4,5)
+    # end
+    # assert_raises(ArgumentError) do
+    #   Employee.create(1,2,3)
+    # end
   end
 
-  def test_add_employee_to_department
-    e = Employee.new(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
-    d = Department.new("Development")
-    d.add_employee(e)
-    assert_equal [e], d.employees
+  def test_add_employee_to_department_03
+    e = Employee.create(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
+    d = Department.create(name: "Development")
+    e.department_id = d.id
+    assert_equal d.id, e.department_id
   end
 
-  def test_get_employee_name
-    employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
+  def test_get_employee_name_04
+    employee = Employee.create( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
     assert_equal "Joanna", employee.name
   end
 
-  def test_get_employee_salary
-    employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
+  def test_get_employee_salary_05
+    employee = Employee.create( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 85000)
     assert_equal 85000, employee.salary
   end
 
-  def test_get_department_salary
-    employee = Employee.new(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
-    employee2 = Employee.new(name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
-    development = Department.new("Development")
-    development.add_employee(employee)
-    development.add_employee(employee2)
+  def test_get_department_salary_06
+    employee = Employee.create(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
+    employee2 = Employee.create(name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
+    development = Department.create("Development")
+    development.insert(employee)
+    # development.add_employee(employee2)
     assert_equal 230000, development.total_salary
   end
 
-  def test_employees_can_be_reviewed
+  def test_employees_can_be_reviewed_07
     employee = Employee.new(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     assert employee.give_review("This employee started off great. Not as impressed with her recent performance.")
   end
 
-  def test_new_employees_should_be_satisfactory
+  def test_new_employees_should_be_satisfactory_08
     employee = Employee.new(name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     assert employee.satisfactory?
   end
 
-  def test_employees_can_get_raises
+  def test_employees_can_get_raises_09
     employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     employee.give_raise(5000)
     assert_equal 85000, employee.salary
   end
 
-  def test_whole_departments_can_get_raises
+  def test_whole_departments_can_get_raises_10
     employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     employee2 = Employee.new( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
     employee3 = Employee.new( name: "Sanic", email: "sanic@example.com", phone: "333-444-5555", salary: 20000)
@@ -81,7 +85,7 @@ class ReviewsTest < Minitest::Test
     assert_equal 20000, employee3.salary
   end
 
-  def test_only_satisfactory_employees_get_raises
+  def test_only_satisfactory_employees_get_raises_11
     employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     employee2 = Employee.new( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
     employee2.give_review("bad negative less")
@@ -95,7 +99,7 @@ class ReviewsTest < Minitest::Test
     assert_equal 150000, employee2.salary
   end
 
-  def test_no_raises_for_all_bad_employees
+  def test_no_raises_for_all_bad_employees_12
     employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
     employee.give_review("bad negative less")
     employee2 = Employee.new( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
@@ -108,7 +112,7 @@ class ReviewsTest < Minitest::Test
     assert_equal 150000, employee2.salary
   end
 
-  def test_reviews_can_be_scanned_and_classified
+  def test_reviews_can_be_scanned_and_classified_13
     employee = Employee.new( name: "Zeke", salary: 100 )
     z_review = "Zeke is a very positive person and encourages those around him, but he has not done well technically this year.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
     Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further."

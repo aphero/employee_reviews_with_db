@@ -1,16 +1,18 @@
+require 'active_record'
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'sqlite3',
+  database: 'db.sqlite3'
+)
+
+class Department < ActiveRecord::Base
+  has_many :employees
+end
+
+# EmployeeReviewMigration.migrate(:down)
+# EmployeeReviewMigration.migrate(:up)
+
 class Department
-
-  attr_reader :name, :employees
-
-  def initialize(name)
-    @name = name
-    @employees = []
-  end
-
-  def add_employee(employee)
-    @employees << employee
-  end
-
   def total_salary
     @employees.reduce(0){|sum, employee| sum + employee.salary}
   end

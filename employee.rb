@@ -1,16 +1,18 @@
+require 'active_record'
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'sqlite3',
+  database: 'db.sqlite3'
+)
+
+class Employee < ActiveRecord::Base
+  belongs_to :department
+end
+
+# EmployeeReviewMigration.migrate(:down)
+# EmployeeReviewMigration.migrate(:up)
+
 class Employee
-
-  attr_reader :name, :salary
-
-  def initialize(name:, salary:, email: nil, phone: nil)
-    @name = name
-    @salary = salary
-    @email = email
-    @phone = phone
-    @reviews = []
-    @satisfactory = true
-  end
-
   def recent_review
     @reviews.last
   end
