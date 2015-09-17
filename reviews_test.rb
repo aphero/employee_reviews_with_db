@@ -99,11 +99,11 @@ class ReviewsTest < Minitest::Test
     employee2 = Employee.create( name: "Umaro", email: "umaro@figaro.com", phone: "882-329-3843", salary: 150000)
     employee2.give_review("bad negative less")
 
-    development = Department.create("Sprouts")
-    development.add_employee(employee)
-    development.add_employee(employee2)
+    dept = Department.create(name: "Sprouts")
+    dept.hire_employee(employee)
+    dept.hire_employee(employee2)
 
-    development.give_raise(10000)
+    dept.give_raise(10000)
     assert_equal 90000, employee.salary
     assert_equal 150000, employee2.salary
   end

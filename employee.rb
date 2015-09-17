@@ -13,21 +13,18 @@ class Employee < ActiveRecord::Base
   end
 
   def satisfactory?
-    if self.satisfactory == nil
-      self.satisfactory = true
-    else
-      self.satisfactory
-    end
+    self.satisfactory
   end
 
   def give_raise(amount)
     self.update(salary: self.salary + amount)
+    self.save
   end
 
-  def give_review(review)
-    reviews << review
+  def give_review(review_text)
+    self.review = review_text
     assess_performance
-    true
+
   end
 
   def assess_performance
@@ -36,9 +33,13 @@ class Employee < ActiveRecord::Base
     good_terms = Regexp.union(good_terms)
     bad_terms = Regexp.union(bad_terms)
 
-    count_good = reviews.last.scan(good_terms).length
-    count_bad = reviews.last.scan(bad_terms).length
+    count_good = self.review.scan(good_terms).length
+    count_bad = self.review.scan(bad_terms).length
 
-    satisfactory = (count_good - count_bad > 0)
+    if count_good > count_bad
+      self.update(satisfactory: 'true')
+    else
+      self.update(satisfactory: 'false')
+    end
   end
 end

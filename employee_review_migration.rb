@@ -13,7 +13,7 @@ class EmployeeReviewMigration < ActiveRecord::Migration
       t.string :email
       t.string :phone
       t.text :review
-      t.boolean :satisfactory
+      t.boolean :satisfactory, default: true
       t.integer :department_id
       t.timestamps null: false
     end
