@@ -113,10 +113,10 @@ class ReviewsTest < Minitest::Test
     employee.give_review("bad negative less")
     employee2 = Employee.create( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
     employee2.give_review("bad negative less")
-    development = Department.create(name: "Development")
-    development.hire_employee(employee)
-    development.hire_employee(employee2)
-    development.give_raise(20000)
+    dept = Department.create(name: "Development")
+    dept.hire_employee(employee)
+    dept.hire_employee(employee2)
+    dept.give_raise(20000)
     assert_equal 80000, employee.salary
     assert_equal 150000, employee2.salary
   end
@@ -143,6 +143,19 @@ class ReviewsTest < Minitest::Test
     assert employee2.satisfactory?
     refute employee3.satisfactory?
     assert employee4.satisfactory?
+  end
+
+  def test_total_employees
+    employee = Employee.create( name: "Strago", email: "strago@figaro.com", phone: "515-888-4821", salary: 80000)
+    employee2 = Employee.create( name: "Relm", email: "relm@figaro.com", phone: "882-329-3843", salary: 150000)
+    employee3 = Employee.create( name: "Mog", email: "mog@figaro.com", phone: "333-444-5555", salary: 20000)
+    dept = Department.create(name: "Development")
+    dept2 = Department.create(name: "Research")
+    dept.hire_employee(employee)
+    dept.hire_employee(employee2)
+    dept2.hire_employee(employee3)
+    assert_equal
+    assert_equal
   end
 
 end
