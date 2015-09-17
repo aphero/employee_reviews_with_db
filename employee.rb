@@ -13,11 +13,15 @@ class Employee < ActiveRecord::Base
   end
 
   def satisfactory?
-    self.satisfactory
+    if self.satisfactory == nil
+      self.satisfactory = true
+    else
+      self.satisfactory
+    end
   end
 
   def give_raise(amount)
-    self.salary += amount
+    self.update(salary: self.salary + amount)
   end
 
   def give_review(review)

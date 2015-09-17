@@ -56,7 +56,7 @@ class ReviewsTest < Minitest::Test
   def test_get_department_salary_06
     employee = Employee.create(name: "Celes", email: "celes@figaro.com", phone: "515-888-4821", salary: 80000)
     employee2 = Employee.create(name: "Sabin", email: "sabin@figaro.com", phone: "882-329-3843", salary: 150000)
-    dept = Department.create(name: "Development")
+    dept = Department.create(name: "Product Development")
     employee.department_id = dept.id
     employee2.department_id = dept.id
     employee.save
@@ -71,43 +71,43 @@ class ReviewsTest < Minitest::Test
   end
 
   def test_new_employees_should_be_satisfactory_08
-    employee = Employee.create(name: "Gau", email: "gau@ff6.com", phone: "515-888-4821", salary: 80000)
+    employee = Employee.create(name: "Gau", email: "gau@figaro.com", phone: "515-888-4821", salary: 80000)
     assert employee.satisfactory?
   end
 
   def test_employees_can_get_raises_09
-    employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
+    employee = Employee.new( name: "Setzer", email: "setzer@figaro.com", phone: "515-888-4821", salary: 80000)
     employee.give_raise(5000)
     assert_equal 85000, employee.salary
   end
   #
-  # def test_whole_departments_can_get_raises_10
-  #   employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
-  #   employee2 = Employee.new( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
-  #   employee3 = Employee.new( name: "Sanic", email: "sanic@example.com", phone: "333-444-5555", salary: 20000)
-  #   development = Department.new("Development")
-  #   development.add_employee(employee)
-  #   development.add_employee(employee2)
-  #   development.give_raise(30000)
-  #   assert_equal 95000, employee.salary
-  #   assert_equal 165000, employee2.salary
-  #   assert_equal 20000, employee3.salary
-  # end
-  #
-  # def test_only_satisfactory_employees_get_raises_11
-  #   employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
-  #   employee2 = Employee.new( name: "Lunk", email: "lunk@example.com", phone: "882-329-3843", salary: 150000)
-  #   employee2.give_review("bad negative less")
-  #
-  #   development = Department.new("Development")
-  #   development.add_employee(employee)
-  #   development.add_employee(employee2)
-  #
-  #   development.give_raise(10000)
-  #   assert_equal 90000, employee.salary
-  #   assert_equal 150000, employee2.salary
-  # end
-  #
+  def test_whole_departments_can_get_raises_10
+    employee = Employee.create( name: "Strago", email: "strago@figaro.com", phone: "515-888-4821", salary: 80000)
+    employee2 = Employee.create( name: "Relm", email: "relm@figaro.com", phone: "882-329-3843", salary: 150000)
+    employee3 = Employee.create( name: "Mog", email: "mog@figaro.com", phone: "333-444-5555", salary: 20000)
+    dept = Department.create(name: "Engineering")
+    dept.hire_employee(employee)
+    dept.hire_employee(employee2)
+    dept.give_raise(30000)
+    assert_equal 95000, employee.salary
+    assert_equal 165000, employee2.salary
+    assert_equal 20000, employee3.salary
+  end
+
+  def test_only_satisfactory_employees_get_raises_11
+    employee = Employee.create( name: "Gogo", email: "gogo@figaro.com", phone: "515-888-4821", salary: 80000)
+    employee2 = Employee.create( name: "Umaro", email: "umaro@figaro.com", phone: "882-329-3843", salary: 150000)
+    employee2.give_review("bad negative less")
+
+    development = Department.create("Sprouts")
+    development.add_employee(employee)
+    development.add_employee(employee2)
+
+    development.give_raise(10000)
+    assert_equal 90000, employee.salary
+    assert_equal 150000, employee2.salary
+  end
+
   # def test_no_raises_for_all_bad_employees_12
   #   employee = Employee.new( name: "Joanna", email: "jdark@example.com", phone: "515-888-4821", salary: 80000)
   #   employee.give_review("bad negative less")

@@ -9,11 +9,11 @@ class EmployeeReviewMigration < ActiveRecord::Migration
   def change
     create_table :employees do |t|
       t.string :name
-      t.decimal :salary, precision: 5, scale: 2
+      t.integer :salary
       t.string :email
       t.string :phone
       t.text :review
-      t.boolean :satisfactory, default: true
+      t.boolean :satisfactory
       t.integer :department_id
       t.timestamps null: false
     end

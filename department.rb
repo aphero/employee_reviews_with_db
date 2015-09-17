@@ -8,6 +8,9 @@ ActiveRecord::Base.establish_connection(
 class Department < ActiveRecord::Base
   has_many :employees
 
+  def hire_employee(emp)
+    employees << emp
+  end
   def total_salary
     employees.reduce(0){|sum, employee| sum + employee.salary}
   end
