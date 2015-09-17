@@ -7,26 +7,21 @@ ActiveRecord::Base.establish_connection(
 
 class Employee < ActiveRecord::Base
   belongs_to :department
-end
 
-# EmployeeReviewMigration.migrate(:down)
-# EmployeeReviewMigration.migrate(:up)
-
-class Employee
   def recent_review
-    @reviews.last
+    reviews.last
   end
 
   def satisfactory?
-    @satisfactory
+    self.satisfactory
   end
 
   def give_raise(amount)
-    @salary += amount
+    self.salary += amount
   end
 
   def give_review(review)
-    @reviews << review
+    reviews << review
     assess_performance
     true
   end
@@ -37,9 +32,9 @@ class Employee
     good_terms = Regexp.union(good_terms)
     bad_terms = Regexp.union(bad_terms)
 
-    count_good = @reviews.last.scan(good_terms).length
-    count_bad = @reviews.last.scan(bad_terms).length
+    count_good = reviews.last.scan(good_terms).length
+    count_bad = reviews.last.scan(bad_terms).length
 
-    @satisfactory = (count_good - count_bad > 0)
+    satisfactory = (count_good - count_bad > 0)
   end
 end
